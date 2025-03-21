@@ -23,15 +23,15 @@ public class Operator {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "cannot be blank")
     @Column(name = "username")
     private String username; 
 
-    @NotBlank
+    @NotBlank(message = "cannot be blank")
     @Column(name = "email")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "cannot be blank")
     @Column(name = "password")
     private String password;
 

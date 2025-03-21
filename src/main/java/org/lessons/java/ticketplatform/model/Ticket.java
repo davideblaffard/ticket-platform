@@ -6,6 +6,7 @@ import org.hibernate.annotations.Generated;
 import org.lessons.java.ticketplatform.model.enums.TicketStatus;
 import org.springframework.data.annotation.Id;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,15 +28,15 @@ public class Ticket {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "cannot be blank")
     @Column(name = "title")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "cannot be blank")
     @Column(name = "description")
     private String description;
 
-    @NotBlank
+    @NotBlank(message = "cannot be blank")
     @Column(name = "ticket_status")
     @Enumerated(EnumType.STRING)
     private TicketStatus status; // TO_DO , ONGOING , COMPLETED
