@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -45,14 +46,8 @@ public class Ticket {
     @JoinColumn(nullable = false)
     private Category category;
 
-    public Ticket(Integer id, String title, String description, TicketStatus status, Operator operator, Category category) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.operator = operator;
-        this.category = category;
-    }
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<Note> notes; 
 
     public Integer getId() {
         return this.id;
