@@ -1,5 +1,8 @@
 package org.lessons.java.ticketplatform.controller;
 
+import org.lessons.java.ticketplatform.model.Ticket;
+
+import org.lessons.java.ticketplatform.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,18 +19,18 @@ import java.util.List;
 public class TicketController {
 
     @Autowired
-    private TicketService ticketService;
+    private TicketRepository ticketRepository;
 
     @GetMapping
     public String index(Model model){
-        List<Ticket> tickets = ticketService.findAll();
+        List<Ticket> tickets = ticketRepository.findAll();
         model.addAttribute("tickets", tickets);
         return "tickets/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable Integer id, Model model){
-        Ticket ticket = ticketService.findById(id);
+        Ticket ticket = ticketRepository.findById(id);
         model.addAttribute("ticket", ticket);
         return "tickets/show";
     }
@@ -40,26 +43,26 @@ public class TicketController {
 
     @PostMapping("/create")
     public String store(@ModelAttribute Ticket ticket) {
-        ticketService.save(ticket);
+        ticketRepository.save(ticket);
         return "redirect:/tickets";
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model){
-        Ticket ticket = ticketService.findById(id);
+        Ticket ticket = ticketRepository.findById(id);
         model.addAttribute("ticket", ticket);
         return "tickets/edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable Integre id, @ModelAttribute Ticket ticket){
-        ticketService.save(id, ticket);
+    public String update(@PathVariable Integer id, @ModelAttribute Ticket ticket){
+        ticketRepository.save(id, ticket);
         return "redirect:/tickets";
     }
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        ticketService.delete(id);
+        ticketRepository.delete(id);
         return "redirect:/tickets";
     }
 }
