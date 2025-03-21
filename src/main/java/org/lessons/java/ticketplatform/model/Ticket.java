@@ -3,6 +3,7 @@ package org.lessons.java.ticketplatform.model;
 import java.util.Locale.Category;
 
 import org.hibernate.annotations.Generated;
+import org.lessons.java.ticketplatform.model.enums.TicketStatus;
 import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.Column;
@@ -95,6 +96,14 @@ public class Ticket {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Note> getNotes() {
+        return this.Notes;
+    }
+
+    public void setNotes(List<Note> Notes) {
+        this.Notes = notes;
     }
 
 }
