@@ -1,9 +1,13 @@
 package org.lessons.java.ticketplatform.model;
 
+import org.lessons.java.ticketplatform.model.enums.Role;
+
 import org.hibernate.annotations.Columns;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +36,9 @@ public class Operator {
     private String password;
 
     private Boolean notAvailable; // se true, l'operatore non può ricevere ulteriori ticket
+
+    @Enumerated(EnumType.STRING)
+    private Role role; // ADMIN , OPERATOR
 
     @OneToMany(mappedBy = "operators")
     private List<Ticket> assignedTickets;
@@ -79,6 +86,14 @@ public class Operator {
 
     public void setNotAvailable(Boolean notAvailable) {
         this.notAvailable = notAvailable;
+    }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public List<Ticket> getAssignedTickets() {
