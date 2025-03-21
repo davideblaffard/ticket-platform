@@ -1,6 +1,6 @@
 package org.lessons.java.ticketplatform.model.enums;
 
-public class TicketStatus {
+public enum TicketStatus {
     TO_DO,
     ONGOING,
     COMPLETATO;
