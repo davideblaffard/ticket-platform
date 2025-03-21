@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table (name = "tickets")
@@ -99,11 +100,10 @@ public class Ticket {
     }
 
     public List<Note> getNotes() {
-        return this.Notes;
+        return this.notes;
     }
 
-    public void setNotes(List<Note> Notes) {
-        this.Notes = notes;
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
-
 }

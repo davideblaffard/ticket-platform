@@ -2,7 +2,6 @@ package org.lessons.java.ticketplatform.model;
 
 import org.lessons.java.ticketplatform.model.enums.Role;
 
-import org.hibernate.annotations.Columns;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table(name = "operators")
