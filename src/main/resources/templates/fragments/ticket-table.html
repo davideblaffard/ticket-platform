@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="ticketTable(tickets)">
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titolo</th>
+                <th>Stato</th>
+                <th>Operatore</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ticket : ${tickets}">
+                <td th:text="${ticket.id}"></td>
+                <td th:text="${ticket.title}"></td>
+                <td th:text="${ticket.status}"></td>
+                <td th:text="${ticket.operator != null ? ticket.operator.username : 'Non assegnato'}"></td>
+                <td>
+                    <a th:href="@{'/admin/tickets/' + ${ticket.id}}">Dettagli</a> |
+                    <a th:href="@{'/admin/tickets/edit/' + ${ticket.id}}">Modifica</a> |
+                    <form th:action="@{'/admin/tickets/delete/' + ${ticket.id}}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Confermi eliminazione?')">Elimina</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+

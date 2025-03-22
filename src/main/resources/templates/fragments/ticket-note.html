@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="noteSection(notes)">
+    <h2>Note</h2>
+
+    <div th:if="${notes != null and #lists.isEmpty(notes)}">
+        <p>Nessuna nota disponibile.</p>
+    </div>
+
+    <ul th:if="${notes != null and !#lists.isEmpty(notes)}">
+        <li th:each="note : ${notes}" style="margin-bottom: 1em;">
+            <strong th:text="${note.operator.username}">Autore</strong>
+            <span th:text="' - ' + ${note.createdOn}"></span><br>
+            <p th:text="${note.content}"></p>
+        </li>
+    </ul>
+
+     <!-- Form per aggiungere una nota -->
+    <form th:action="@{/notes/create}" method="post">
+        <input type="hidden" name="ticketId" th:value="${ticket.id}" />
+        <textarea name="content" rows="3" cols="50" placeholder="Scrivi una nuova nota..." required></textarea><br>
+        <button type="submit">Aggiungi Nota</button>
+    </form>
+</div>
+</body>
+</html>
