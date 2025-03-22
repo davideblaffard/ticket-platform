@@ -22,7 +22,11 @@ public class AuthController {
 
     @GetMapping("/redirect")
     public String redirectAfterLogin(@AuthenticationPrincipal Operator loggedOperator){
-        if(loggedOperator.getRole() == Role.ADMIN){
+        if (loggedOperator == null) {
+            return "redirect:/login?error";
+        }
+    
+        if (loggedOperator.getRole() == Role.ADMIN) {
             return "redirect:/admin/dashboard";
         } else {
             return "redirect:/operator/dashboard";
