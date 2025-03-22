@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard Admin</title>
+</head>
+<body>
+    <header th:replace="fragments/navbar :: navbar"></header>
+
+    <h1>Gestione Ticket</h1>
+
+    <form method="get" th:action="@{/admin/dashboard}">
+        <input type="text" name="keyword" placeholder="Cerca per titolo" th:value="${keyword}">
+        <button type="submit">Cerca</button>
+    </form>
+
+    <div th:replace="fragments/ticket-table :: ticketTable(${tickets})"></div>
+
+    <a th:href="@{/tickets/create}">Crea nuovo ticket</a>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
