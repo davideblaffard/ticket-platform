@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="navbar">
+    <nav style="background-color: #333; padding: 1em;">
+        <a href="/" style="color: white; margin-right: 1em;">Home</a>
+
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" 
+           th:href="@{/admin/dashboard}" style="color: white; margin-right: 1em;">
+            Dashboard Admin
+        </a>
+
+        <a th:if="${#authorization.expression('hasRole(''OPERATOR'')')}" 
+           th:href="@{/operator/dashboard}" style="color: white; margin-right: 1em;">
+            Dashboard Operatore
+        </a>
+
+        <a href="/logout" style="color: white; float: right;">Logout</a>
+    </nav>
+</div>
+</body>
+</html>
