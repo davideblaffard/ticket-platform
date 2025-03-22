@@ -1,10 +1,8 @@
 package org.lessons.java.ticketplatform.model;
 
-import java.util.Locale.Category;
 
-import org.hibernate.annotations.Generated;
+
 import org.lessons.java.ticketplatform.model.enums.TicketStatus;
-import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,11 +11,14 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+
+import org.lessons.java.ticketplatform.model.Category;
 import java.util.List;
 
 @Entity
@@ -25,15 +26,12 @@ import java.util.List;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @NotBlank(message = "cannot be blank")
-    @Column(name = "title")
     private String title;
 
     @NotBlank(message = "cannot be blank")
-    @Column(name = "description")
     private String description;
 
     @NotBlank(message = "cannot be blank")

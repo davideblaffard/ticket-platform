@@ -47,7 +47,7 @@ public class Operator implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role; // ADMIN , OPERATOR
 
-    @OneToMany(mappedBy = "operators")
+    @OneToMany(mappedBy = "operator")
     private List<Ticket> assignedTickets;
 
 
