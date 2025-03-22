@@ -1,7 +1,9 @@
 package org.lessons.java.ticketplatform.model;
 
 import org.lessons.java.ticketplatform.model.enums.Role;
-
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +17,14 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Collection;
+
 @Entity
 @Table(name = "operators")
-public class Operator {
+public class Operator implements UserDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +35,7 @@ public class Operator {
     private String username; 
 
     @NotBlank(message = "cannot be blank")
-    @Column(name = "email")
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "cannot be blank")
@@ -44,6 +51,28 @@ public class Operator {
     private List<Ticket> assignedTickets;
 
 
+
+    /***** SPRING SECURITY *****/
+    // Metodo per restituire i ruoli di Spring Security
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() { return true; }
+
+    /***** getters & setters *****/
+
     public Integer getId() {
         return this.id;
     }
@@ -52,6 +81,7 @@ public class Operator {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return this.username;
     }
@@ -68,6 +98,7 @@ public class Operator {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return this.password;
     }
