@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dettaglio Ticket</title>
+</head>
+<body>
+    <header th:replace="fragments/navbar :: navbar"></header>
+
+    <h1 th:text="${ticket.title}">Titolo ticket</h1>
+
+    <p><strong>Descrizione:</strong></p>
+    <p th:text="${ticket.description}"></p>
+
+    <p><strong>Categoria:</strong> <span th:text="${ticket.category.categoryName}"></span></p>
+    <p><strong>Stato:</strong> <span th:text="${ticket.status}"></span></p>
+    <p><strong>Operatore Assegnato:</strong>
+        <span th:text="${ticket.operator != null ? ticket.operator.username : 'Nessuno'}"></span>
+    </p>
+
+    <div th:replace="fragments/ticket-note :: noteSection(${ticket.noteList})"></div>
+
+    <a th:href="@{'/admin/tickets/edit/' + ${ticket.id}}">Modifica</a>
+
+    <form th:action="@{'/admin/tickets/delete/' + ${ticket.id}}" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo ticket?')">Elimina</button>
+    </form>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
