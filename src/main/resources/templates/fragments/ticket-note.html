@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head></head>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
-<div th:fragment="noteSection(notes)">
-    <h2>Note</h2>
+<div th:fragment="ticketNote(ticket, note)">
+    <h3>Note del ticket</h3>
 
-    <div th:if="${notes != null and #lists.isEmpty(notes)}">
-        <p>Nessuna nota disponibile.</p>
-    </div>
-
-    <ul th:if="${notes != null and !#lists.isEmpty(notes)}">
-        <li th:each="note : ${notes}" style="margin-bottom: 1em;">
-            <strong th:text="${note.operator.username}">Autore</strong>
-            <span th:text="' - ' + ${note.createdOn}"></span><br>
-            <p th:text="${note.content}"></p>
+    <ul>
+        <li th:each="n : ${ticket.notes}">
+            <strong th:text="${n.operator.username}">Autore</strong> -
+            <em th:text="${n.createdOn}">Data</em><br/>
+            <span th:text="${n.content}">Contenuto</span>
+            <hr/>
         </li>
     </ul>
 
-     <!-- Form per aggiungere una nota -->
-    <form th:action="@{/notes/create}" method="post">
-        <input type="hidden" name="ticketId" th:value="${ticket.id}" />
-        <textarea name="content" rows="3" cols="50" placeholder="Scrivi una nuova nota..." required></textarea><br>
-        <button type="submit">Aggiungi Nota</button>
-    </form>
+    <!-- Form per aggiungere una nuova nota (solo operatori) -->
+    <div sec:authorize="hasRole('OPERATOR')">
+        <form th:action="@{'/operator/tickets/' + ${ticket.id} + '/notes'}" method="post" th:object="${note}">
+            <div>
+                <label for="content">Aggiungi nota:</label><br>
+                <textarea th:field="*{content}" rows="4" cols="50" required></textarea>
+            </div>
+            <br>
+            <button type="submit">Salva nota</button>
+        </form>
+    </div>
 </div>
 </body>
 </html>
