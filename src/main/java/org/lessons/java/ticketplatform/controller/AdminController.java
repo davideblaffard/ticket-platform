@@ -4,10 +4,12 @@ import org.lessons.java.ticketplatform.model.Ticket;
 
 import org.lessons.java.ticketplatform.repository.OperatorRepository;
 import org.lessons.java.ticketplatform.repository.TicketRepository;
+import org.lessons.java.ticketplatform.security.DatabaseOperatorDetails;
 import org.lessons.java.ticketplatform.repository.CategoryRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,20 +37,29 @@ public class AdminController {
     private CategoryRepository categoryRepository;
 
     // Lista e ricerca
-    @GetMapping("/admin/dashboard")
-    public String dashboard(@RequestParam(required = false) String keyword, Model model) {
-        List<Ticket> tickets;
+    @GetMapping("/dashboard")
+    public String adminDashboard(@RequestParam(required = false) String keyword, Model model, 
+    @AuthenticationPrincipal DatabaseOperatorDetails loggedUser) {
+        List<Ticket> allTickets = (keyword != null && !keyword.isEmpty())
+            ? ticketRepository.findByTitleContainingIgnoreCase(keyword)
+            : ticketRepository.findAll();
 
-        if (keyword != null && !keyword.isEmpty()) {
-            tickets = ticketRepository.findByTitleContainingIgnoreCase(keyword);
-        } else {
-            tickets = ticketRepository.findAll();
-        }
+        List<Ticket> myTickets = ticketRepository.findByOperator_Id(loggedUser.getId());
 
-        model.addAttribute("tickets", tickets);
+        // if (keyword != null && !keyword.trim().isEmpty()) {
+        //     allTickets = ticketRepository.findByTitleContainingIgnoreCase(keyword);
+        // } else {
+        //     allTickets = ticketRepository.findAll();
+        // }
+
+        // myTickets = ticketRepository.findByOperator_Id(loggedUser.getId());
+
+        model.addAttribute("tickets", allTickets);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("user", loggedUser);
+        model.addAttribute("myTickets", myTickets);
 
-        return "admin/dashboard";
+        return "user/dashboard";
     }
 
     /***** CRUD *****/
@@ -66,11 +77,12 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
+    @GetMapping("/tickets/{id}")
     public String show(@PathVariable Integer id, Model model) {
         Optional<Ticket> result = ticketRepository.findById(id);
         if (result.isPresent()) {
             model.addAttribute("ticket", result.get());
-            return "admin/tickets/show";
+            return "user/tickets/show";
         } else {
             return "redirect:/admin/dashboard";
         }

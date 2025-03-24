@@ -42,9 +42,9 @@ public class NoteController {
             note.setOperator(loggedOperator); // l'autore della nota è l'utente loggato
 
             noteRepository.save(note);
-            return "redirect:/admin/tickets/" + ticketId;
+            return "redirect:/user/tickets/" + ticketId;
         } else {
-            return "redirect:/admin/dashboard";
+            return "redirect:/user/dashboard";
         }
     }
 }
