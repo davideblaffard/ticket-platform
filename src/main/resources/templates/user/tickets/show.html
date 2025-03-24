@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Dettaglio Ticket</title>
+</head>
+<body>
+<header th:replace="~{fragments/navbar :: navbar}"></header>
+
+<h1 th:text="${ticket.title}">Titolo ticket</h1>
+
+<p><strong>Descrizione:</strong></p>
+<p th:text="${ticket.description}"></p>
+
+<p><strong>Categoria:</strong> <span th:text="${ticket.category.categoryName}"></span></p>
+<p><strong>Stato:</strong> <span th:text="${ticket.status}"></span></p>
+<p><strong>Operatore Assegnato:</strong>
+    <span th:text="${ticket.operator != null ? ticket.operator.username : 'Nessuno'}"></span>
+</p>
+
+<!-- NOTES -->
+<div th:replace="~{fragments/ticket-note :: noteSection(${ticket.notes})}"></div>
+
+<!-- ADMIN -->
+<sec:authorize access="hasRole('ADMIN')">
+    <a th:href="@{'/admin/tickets/edit/' + ${ticket.id}}">Modifica</a>
+
+    <form th:action="@{'/admin/tickets/delete/' + ${ticket.id}}" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo ticket?')">Elimina</button>
+    </form>
+</sec:authorize>
+
+<!-- OPERATOR -->
+<sec:authorize access="hasRole('OPERATOR')">
+    <form th:action="@{'/operator/tickets/update-status/' + ${ticket.id}}" method="post">
+        <label for="status">Aggiorna stato:</label>
+        <select name="status" id="status">
+            <option value="TO_DO">TO_DO</option>
+            <option value="ON_GOING">ON_GOING</option>
+            <option value="COMPLETED">COMPLETED</option>
+        </select>
+        <button type="submit">Aggiorna</button>
+    </form>
+
+    <form th:action="@{'/operator/tickets/add-note/' + ${ticket.id}}" method="post">
+        <textarea name="content" placeholder="Scrivi una nota..." required></textarea><br>
+        <button type="submit">Aggiungi Nota</button>
+    </form>
+</sec:authorize>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
