@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"></html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
+
+    <h1 th:text="'Dashboard di ' + ${user.username}"></h1>
+
+    <!-- view ADMIN -->
+    <sec:authorize access="hasRole('ADMIN')">
+        <h2>Gestione completa dei ticket</h2>
+
+    <form method="get" th:action="@{/user/dashboard}">
+        <input type="text" name="keyword" placeholder="Cerca per titolo" th:value="${keyword}">
+        <button type="submit">Cerca</button>
+    </form>
+
+    <div th:replace="~{fragments/ticket-table :: ticketTable(${tickets})}"></div>
+
+    <a th:href="@{/admin/tickets/create}">Crea nuovo ticket</a>
+    </sec:authorize>
+
+
+    <!-- view OPERATORE -->
+    <sec:authorize access="hasRole('OPERATOR')">
+        
+        <h2>Ticket assegnati a te</h2>
+
+        <div th:replace="~{fragments/ticket-table :: ticketTable(${myTickets})}"></div>
+        <!-- buttons per operazioni consentite -->
+    </sec:authorize>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
