@@ -1,9 +1,6 @@
 package org.lessons.java.ticketplatform.model;
 
 import org.lessons.java.ticketplatform.model.enums.Role;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,14 +14,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
-
 @Entity
 @Table(name = "operators")
-public class Operator implements UserDetails {
+public class Operator{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +34,7 @@ public class Operator implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @Column
     private Boolean notAvailable; // se true, l'operatore non può ricevere ulteriori ticket
 
     @Enumerated(EnumType.STRING)
@@ -49,29 +42,9 @@ public class Operator implements UserDetails {
 
     @OneToMany(mappedBy = "operator")
     private List<Ticket> assignedTickets;
-
-
-
-    /***** SPRING SECURITY *****/
-    // Metodo per restituire i ruoli di Spring Security
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() { return true; }
-
-    @Override
-    public boolean isAccountNonLocked() { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired() { return true; }
-
-    @Override
-    public boolean isEnabled() { return true; }
-
-    /***** getters & setters *****/
+    
+    @Column
+    private Boolean enable = true;
 
     public Integer getId() {
         return this.id;
@@ -80,10 +53,9 @@ public class Operator implements UserDetails {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    @Override
+    
     public String getUsername() {
-        return this.username;
+        return this.username;     
     }
 
     public void setUsername(String username) {
@@ -97,8 +69,6 @@ public class Operator implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @Override
     public String getPassword() {
         return this.password;
     }
@@ -134,6 +104,25 @@ public class Operator implements UserDetails {
     public void setAssignedTickets(List<Ticket> assignedTickets) {
         this.assignedTickets = assignedTickets;
     }
+
+    public Boolean getEnable() {
+        return this.enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
+    }
+
+    @Override
+    public String toString() {
+        return "Operator{" +
+            "id=" + id +
+            ", email='" + email + '\'' +
+            ", role=" + role +
+            ", notAvailable=" + notAvailable +
+            ", enable=" + enable +
+            '}';
+}
 
 
 }
