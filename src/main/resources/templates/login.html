@@ -5,12 +5,10 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <header th:replace="fragments/navbar :: navbar"></header>
-
     <h1>Accedi alla piattaforma</h1>
 
-    <form th:action="@{/login}" method="post">
-        <label for="email">Email:</label><br>
+    <form th:action="@{/login}" method="post" onsubmit="console.log('Form inviato')">
+        <label for="username">Email:</label><br>
         <input type="text" id="email" name="username" required><br><br>
 
         <label for="password">Password:</label><br>
@@ -22,6 +20,6 @@
     <p th:if="${param.error}" style="color:red;">Email o password non validi</p>
     <p th:if="${param.logout}" style="color:green;">Logout effettuato con successo</p>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
