@@ -18,7 +18,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
-import org.lessons.java.ticketplatform.model.Category;
 import java.util.List;
 
 @Entity
