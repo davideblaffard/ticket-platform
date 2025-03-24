@@ -1,33 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Crea Ticket</title>
 </head>
 <body>
-    <header th:replace="fragments/navbar :: navbar"></header>
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
 
     <h1>Crea Nuovo Ticket</h1>
 
     <form th:action="@{/admin/tickets/create}" method="post" th:object="${ticket}">
-        <label>Titolo:</label>
-        <input type="text" th:field="*{title}" required><br><br>
+        <label for="title">Titolo:</label>
+        <input type="text" id="title" th:field="*{title}" required><br><br>
 
-        <label>Descrizione:</label><br>
-        <textarea th:field="*{description}" rows="5" cols="50" required></textarea><br><br>
+        <label for="description">Descrizione:</label><br>
+        <textarea id="description" th:field="*{description}" rows="5" cols="50" required></textarea><br><br>
 
-        <label>Categoria:</label>
-        <select th:field="*{category}">
+        <label for="category">Categoria:</label>
+        <select id="category" th:field="*{category}">
             <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat.categoryName}"></option>
         </select><br><br>
 
-        <label>Assegna a operatore:</label>
-        <select th:field="*{operator}">
+        <label for="operator">Assegna a operatore:</label>
+        <select id="operator" th:field="*{operator}">
             <option th:each="op : ${operators}" th:value="${op}" th:text="${op.username}"></option>
         </select><br><br>
 
         <button type="submit">Salva</button>
     </form>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
