@@ -3,22 +3,40 @@
 <head>
     <title>Login - Ticket Platform</title>
     <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Accedi alla piattaforma</h1>
+<body class="d-flex flex-column min-vh-100">
 
-    <form th:action="@{/login}" method="post" onsubmit="console.log('Form inviato')">
-        <label for="username">Email:</label><br>
-        <input type="text" id="email" name="username" required><br><br>
+    <div class="container d-flex justify-content-center align-items-center flex-grow-1">
+        <div class="card shadow p-4" style="min-width: 350px; max-width: 400px; width: 100%;">
+            <h2 class="text-center mb-4">Accedi alla piattaforma</h2>
 
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
+            <!-- Messaggi di errore/successo -->
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                Email o password non validi.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                Logout effettuato con successo.
+            </div>
 
-        <button type="submit">Login</button>
-    </form>
+            <!-- Form login -->
+            <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" id="email" name="username" class="form-control" required>
+                </div>
 
-    <p th:if="${param.error}" style="color:red;">Email o password non validi</p>
-    <p th:if="${param.logout}" style="color:green;">Logout effettuato con successo</p>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
