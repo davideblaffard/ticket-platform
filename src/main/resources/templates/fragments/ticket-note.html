@@ -2,27 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
-<div th:fragment="ticketNote(ticket, note)">
-    <h3>Note del ticket</h3>
+<div th:fragment="noteSection(notes)">
+    <div class="mt-5">
+        <h3 class="mb-4">Note del Ticket</h3>
 
-    <ul>
-        <li th:each="n : ${ticket.notes}">
-            <strong th:text="${n.operator.username}">Autore</strong> -
-            <em th:text="${n.createdOn}">Data</em><br/>
-            <span th:text="${n.content}">Contenuto</span>
-            <hr/>
-        </li>
-    </ul>
+        <div th:if="${notes.isEmpty()}" class="alert alert-info">
+            Nessuna nota presente.
+        </div>
 
-    <!-- Form per aggiungere una nuova nota (solo operatori) -->
-    <div sec:authorize="hasRole('OPERATOR')">
-        <form th:action="@{'/operator/tickets/' + ${ticket.id} + '/notes'}" method="post" th:object="${note}">
-            <div>
-                <label for="content">Aggiungi nota:</label><br>
-                <textarea th:field="*{content}" rows="4" cols="50" required></textarea>
+        <ul class="list-group mb-4" th:if="${!notes.isEmpty()}">
+            <li class="list-group-item" th:each="n : ${notes}">
+                <div class="fw-bold" th:text="${n.operator.username}">Autore</div>
+                <div class="text-muted mb-1" th:text="${n.createdOn}">Data</div>
+                <p th:text="${n.content}">Contenuto</p>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div th:fragment="noteForm(ticket, note)">
+    <div sec:authorize="hasRole('OPERATOR')" class="mt-4">
+        <h4>Aggiungi una nota</h4>
+        <form th:action="@{'/operator/tickets/' + ${ticket.id} + '/notes'}"
+            method="post" th:object="${note}" class="border p-4 rounded shadow-sm mt-3">
+            <div class="mb-3">
+                <label for="content" class="form-label">Contenuto</label>
+                <textarea th:field="*{content}" class="form-control" rows="4" required></textarea>
             </div>
-            <br>
-            <button type="submit">Salva nota</button>
+            <button type="submit" class="btn btn-outline-success">Salva nota</button>
         </form>
     </div>
 </div>
