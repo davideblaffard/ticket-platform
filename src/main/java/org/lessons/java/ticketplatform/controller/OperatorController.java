@@ -7,7 +7,9 @@ import org.lessons.java.ticketplatform.model.enums.TicketStatus;
 import org.lessons.java.ticketplatform.repository.NoteRepository;
 import org.lessons.java.ticketplatform.repository.OperatorRepository;
 import org.lessons.java.ticketplatform.repository.TicketRepository;
+import org.lessons.java.ticketplatform.repository.CategoryRepository;
 import org.lessons.java.ticketplatform.security.DatabaseOperatorDetails;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +35,9 @@ import java.util.Optional;
 public class OperatorController {
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private TicketRepository ticketRepository;
 
     @Autowired
@@ -45,28 +50,10 @@ public class OperatorController {
     public String operatorDashboard(@AuthenticationPrincipal DatabaseOperatorDetails loggedUser,Model model) {
         model.addAttribute("myTickets", ticketRepository.findByOperator_Id(loggedUser.getId()));
         model.addAttribute("user", loggedUser);
-        return "user/dashboard"; // stesso file
+        return "operator/dashboard"; // stesso file
     }
-
-    @GetMapping("/tickets/{id}")
-    public String showTicket(@PathVariable Integer id, @AuthenticationPrincipal DatabaseOperatorDetails loggedUser, Model model) {
-        Optional<Ticket> result = ticketRepository.findById(id);
-        if (result.isPresent()) {
-            Ticket ticket = result.get();
-
-            // sicurezza: ticket assegnato a lui?
-            if (!ticket.getOperator().getId().equals(loggedUser.getId())) {
-                return "redirect:/operator/dashboard";
-            }
-
-            model.addAttribute("ticket", ticket);
-            model.addAttribute("note", new Note()); // per form nuova nota
-            return "user/tickets/show";
-        }
-
-        return "redirect:/operator/dashboard";
-    }
-
+    /***** CRUD TICKET *****/
+    // addNote, updateStatus
     @PostMapping("/tickets/{id}/notes")
     public String addNote(
         @PathVariable Integer id,
@@ -102,7 +89,7 @@ public class OperatorController {
         @RequestParam TicketStatus status,
         @AuthenticationPrincipal DatabaseOperatorDetails loggedUser
     ) {
-        Optional<Ticket> result = ticketRepository.findById(id);
+        Optional<Ticket> result = ticketRepository.findByIdWithNotes(id);
         if (result.isPresent()) {
             Ticket ticket = result.get();
 
@@ -118,7 +105,8 @@ public class OperatorController {
 
         return "redirect:/operator/dashboard";
     }
-
+    /***** CRUD USER *****/
+    //shoeProfile, updateProfile
     @GetMapping("/profile")
     public String showProfile(Model model, @AuthenticationPrincipal DatabaseOperatorDetails loggedUser) {
         Operator operator = operatorRepository.findById(loggedUser.getId()).get();

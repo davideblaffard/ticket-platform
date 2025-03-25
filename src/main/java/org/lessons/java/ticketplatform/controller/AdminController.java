@@ -1,6 +1,7 @@
 package org.lessons.java.ticketplatform.controller;
 
 import org.lessons.java.ticketplatform.model.Ticket;
+import org.lessons.java.ticketplatform.model.Operator;
 
 import org.lessons.java.ticketplatform.repository.OperatorRepository;
 import org.lessons.java.ticketplatform.repository.TicketRepository;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
@@ -59,8 +59,33 @@ public class AdminController {
         model.addAttribute("user", loggedUser);
         model.addAttribute("myTickets", myTickets);
 
-        return "user/dashboard";
+        return "admin/dashboard";
     }
+
+
+    @GetMapping("/profile")
+    public String showAdminProfile(
+        Model model,
+        @AuthenticationPrincipal DatabaseOperatorDetails loggedUser
+    ) {
+        Operator admin = operatorRepository.findById(loggedUser.getId()).get();
+        model.addAttribute("admin", admin);
+        return "admin/profile";
+    }
+
+    @PostMapping("/profile")
+    public String updateAdminProfile(
+        @ModelAttribute("admin") Operator adminUpdate,
+        @AuthenticationPrincipal DatabaseOperatorDetails loggedUser
+    ) {
+        Operator admin = operatorRepository.findById(loggedUser.getId()).get();
+
+        admin.setUsername(adminUpdate.getUsername());
+        operatorRepository.save(admin);
+
+        return "redirect:/admin/profile?success";
+    }
+
 
     /***** CRUD *****/
     @GetMapping("/tickets/create")
@@ -73,37 +98,6 @@ public class AdminController {
 
     @PostMapping("/tickets/create")
     public String store(@ModelAttribute Ticket ticket) {
-        ticketRepository.save(ticket);
-        return "redirect:/admin/dashboard";
-    }
-
-    @GetMapping("/tickets/{id}")
-    public String show(@PathVariable Integer id, Model model) {
-        Optional<Ticket> result = ticketRepository.findById(id);
-        if (result.isPresent()) {
-            model.addAttribute("ticket", result.get());
-            return "user/tickets/show";
-        } else {
-            return "redirect:/admin/dashboard";
-        }
-    }
-
-    @GetMapping("/tickets/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model) {
-        Optional<Ticket> result = ticketRepository.findById(id);
-        if (result.isPresent()) {
-            model.addAttribute("ticket", result.get());
-            model.addAttribute("operators", operatorRepository.findAll());
-            model.addAttribute("categories", categoryRepository.findAll());
-            return "admin/tickets/edit";
-        } else {
-            return "redirect:/admin/dashboard";
-        }
-    }
-
-    @PostMapping("/tickets/edit/{id}")
-    public String update(@PathVariable Integer id, @ModelAttribute Ticket ticket) {
-        ticket.setId(id);
         ticketRepository.save(ticket);
         return "redirect:/admin/dashboard";
     }
