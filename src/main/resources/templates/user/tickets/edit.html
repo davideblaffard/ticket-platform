@@ -36,7 +36,18 @@
                         th:selected="${cat.id == ticket.category.id}">
                 </option>
             </select>
-            
+        <!-- STATUS -->
+            <div class="mb-4">
+                <label class="form-label">Stato</label>
+                <select th:field="*{status}" class="form-select">
+                    <option th:each="s : ${T(org.lessons.java.ticketplatform.model.enums.TicketStatus).values()}"
+                            th:value="${s}"
+                            th:text="${s}"
+                            th:selected="${s.name() == ticket.status.name()}">
+                    </option>
+                </select>
+            </div>
+
         </div>
         <!-- Operator -->
         <div class="mb-4">
@@ -58,7 +69,8 @@
         <!-- Azioni -->
         <div class="d-flex justify-content-between">
             <button type="submit" class="btn btn-primary">Aggiorna</button>
-            <a th:href="@{/user/dashboard}" class="btn btn-secondary">Annulla</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" class="btn btn-secondary">Annulla</a>
+            <a sec:authorize="hasRole('OPERATOR')" th:href="@{/operator/dashboard}" class="btn btn-secondary">Annulla</a>
         </div>
     </form>
 </div>

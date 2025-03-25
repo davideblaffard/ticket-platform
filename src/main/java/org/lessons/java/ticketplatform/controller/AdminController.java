@@ -98,13 +98,13 @@ public class AdminController {
 
     @PostMapping("/tickets/create")
     public String store(@ModelAttribute Ticket ticket) {
-        ticketRepository.save(ticket);
-        return "redirect:/admin/dashboard";
+        Ticket savedTicket = ticketRepository.save(ticket);
+        return "redirect:/admin/dashboard?createdId=" + savedTicket.getId();
     }
 
     @PostMapping("/tickets/delete/{id}")
     public String delete(@PathVariable Integer id) {
         ticketRepository.deleteById(id);
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard?deletedId=" + id;
     }
 }

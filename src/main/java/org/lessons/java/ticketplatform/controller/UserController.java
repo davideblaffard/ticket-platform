@@ -56,13 +56,7 @@ public class UserController {
             model.addAttribute("ticket", ticket);
             model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("operators", operatorRepository.findAll());
-
-            // Imposta l'action giusta nel form
-            String actionPath = (loggedUser.getRole().name().equals("ADMIN"))
-                    ? "/admin/tickets/edit/" + id
-                    : "/operator/tickets/edit/" + id;
-
-            model.addAttribute("formAction", actionPath);
+            model.addAttribute("formAction", "/user/tickets/edit/" + id);
 
             return "user/tickets/edit";
         }
