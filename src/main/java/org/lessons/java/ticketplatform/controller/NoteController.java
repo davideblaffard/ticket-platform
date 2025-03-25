@@ -4,20 +4,21 @@ import org.lessons.java.ticketplatform.model.Note;
 import org.lessons.java.ticketplatform.model.Ticket;
 import org.lessons.java.ticketplatform.model.Operator;
 
-import org.lessons.java.ticketplatform.repository.OperatorRepository;
-import org.lessons.java.ticketplatform.repository.TicketRepository;
 import org.lessons.java.ticketplatform.repository.NoteRepository;
+import org.lessons.java.ticketplatform.repository.TicketRepository;
+import org.lessons.java.ticketplatform.repository.OperatorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.Optional;
 
 @Controller
 public class NoteController {
+
     @Autowired
     private NoteRepository noteRepository;
 
@@ -35,16 +36,25 @@ public class NoteController {
 
         Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
 
-        if (ticketOpt.isPresent()) {
-            Note note = new Note();
-            note.setContent(content);
-            note.setTicket(ticketOpt.get());
-            note.setOperator(loggedOperator); // l'autore della nota è l'utente loggato
-
-            noteRepository.save(note);
-            return "redirect:/user/tickets/" + ticketId;
-        } else {
-            return "redirect:/user/dashboard";
+        if (ticketOpt.isEmpty()) {
+            return "redirect:/operator/dashboard";
         }
+
+        Ticket ticket = ticketOpt.get();
+
+        // Sicurezza: solo l'operatore assegnato può aggiungere note
+        if (!ticket.getOperator().getId().equals(loggedOperator.getId())) {
+            return "redirect:/operator/dashboard";
+        }
+
+        // Creazione della nota
+        Note note = new Note();
+        note.setContent(content);
+        note.setTicket(ticket);
+        note.setOperator(loggedOperator);
+
+        noteRepository.save(note);
+
+        return "redirect:/operator/tickets/" + ticketId;
     }
 }
