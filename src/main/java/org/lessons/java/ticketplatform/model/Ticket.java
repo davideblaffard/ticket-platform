@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class Ticket {
     @NotBlank(message = "cannot be blank")
     private String description;
 
-    @NotBlank(message = "cannot be blank")
+    @NotNull(message = "cannot be null")
     @Column(name = "ticket_status")
     @Enumerated(EnumType.STRING)
     private TicketStatus status; // TO_DO , ONGOING , COMPLETED
