@@ -19,6 +19,10 @@ public class SecurityConfig {
     @Autowired
     private OperatorDetailsService operatorDetailsService;
 
+    // @Autowired
+    // private PasswordEncoder passwordEncoder;
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -26,6 +30,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/operator/**").hasRole("OPERATOR")
+                .requestMatchers("/user/**").hasAnyRole("ADMIN", "OPERATOR")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

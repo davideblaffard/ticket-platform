@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "notes")
@@ -26,7 +27,6 @@ public class Note {
     private String content;
 
     @Column(name = "created_on")
-    @NotBlank
     private LocalDate createdOn;
 
     @ManyToOne
@@ -80,6 +80,6 @@ public class Note {
 
     @PrePersist
     protected void onCreate(){
-        createdOn = LocalDate.now();
+        this.createdOn = LocalDate.now();
     }
 }
