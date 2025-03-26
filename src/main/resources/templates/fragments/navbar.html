@@ -20,9 +20,24 @@
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto d-flex align-items-center gap-2">
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="/logout">Logout</a>
+                        <a class="btn btn-outline-light btn-sm" th:href="@{/user/profile}">
+                            Vai al tuo profilo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" method="post" class="d-inline" onsubmit="return confirmLogout()">
+                            <button type="submit" class="btn btn-outline-light btn-sm float-end">
+                                Logout
+                            </button>
+                        </form>
+                        
+                        <script>
+                            function confirmLogout() {
+                                return confirm("Sei sicuro di voler effettuare il logout?");
+                            }
+                        </script>
                     </li>
                 </ul>
             </div>
