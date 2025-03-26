@@ -69,8 +69,17 @@
         <!-- Azioni -->
         <div class="d-flex justify-content-between">
             <button type="submit" class="btn btn-primary">Aggiorna</button>
-            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" class="btn btn-secondary">Annulla</a>
-            <a sec:authorize="hasRole('OPERATOR')" th:href="@{/operator/dashboard}" class="btn btn-secondary">Annulla</a>
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" 
+                th:href="@{/admin/dashboard}" 
+                class="btn btn-secondary">
+                    Torna alla Dashboard
+                </a>
+                
+                <a th:if="${#authorization.expression('hasRole(''OPERATOR'')')}" 
+                th:href="@{/operator/dashboard}" 
+                class="btn btn-secondary">
+                    Torna alla Dashboard
+                </a>
         </div>
     </form>
 </div>
