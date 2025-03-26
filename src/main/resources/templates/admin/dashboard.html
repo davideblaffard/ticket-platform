@@ -23,13 +23,27 @@
         <div th:if="${param.successId}" class="alert alert-success">
             Ticket #[[${param.successId}]] aggiornato con successo!
         </div>        
-
-        <form method="get" th:action="@{/admin/dashboard}" class="mb-4 row g-2">
-            <div class="col-sm-8">
-                <input type="text" name="keyword" class="form-control" placeholder="Cerca per titolo" th:value="${keyword}">
+        <form method="get" th:action="@{/admin/dashboard}" class="row g-2 mb-4">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="keyword" placeholder="Cerca per titolo" th:value="${keyword}">
             </div>
-            <div class="col-sm-4">
-                <button type="submit" class="btn btn-primary w-100">Cerca</button>
+        
+            <div class="col-md-3">
+                <select name="categoryId" class="form-select">
+                    <option value="">Tutte le categorie</option>
+                    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.categoryName}"></option>
+                </select>
+            </div>
+        
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">Tutti gli stati</option>
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                </select>
+            </div>
+        
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filtra</button>
             </div>
         </form>
 

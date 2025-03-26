@@ -11,12 +11,56 @@
         <h1 class="mb-4" th:text="'Dashboard Operatore - ' + ${user.username}"></h1>
 
         <h2 class="mb-3">Ticket assegnati a te</h2>
-        <div th:if="${param.successId}" class="alert alert-success">
-            Ticket #[[${param.successId}]] aggiornato con successo!
-        </div>        
+        <!-- Alert successo -->
+            <div th:if="${param.successId}" class="alert alert-success">
+                Ticket #[[${param.successId}]] aggiornato con successo!
+            </div>
 
-        <div th:replace="~{fragments/ticket-table :: ticketTable(${myTickets})}"></div>
-    </div>
+            <!-- Form di filtro -->
+            <form class="row g-2 mb-4" method="get" th:action="@{/operator/dashboard}">
+                <!-- Ricerca per titolo -->
+                <div class="col-md-4">
+                    <input type="text" name="keyword" class="form-control" placeholder="Cerca per titolo"
+                        th:value="${keyword}">
+                </div>
+
+                <!-- Categoria -->
+                <div class="col-md-3">
+                    <select name="categoryId" class="form-select">
+                        <option value="" disabled th:selected="${categoryId == null}">Filtra per categoria</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.id}"
+                                th:text="${cat.categoryName}"
+                                th:selected="${cat.id == categoryId}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Stato -->
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="" disabled th:selected="${status == null}">Filtra per stato</option>
+                        <option th:each="s : ${statuses}"
+                                th:value="${s}"
+                                th:text="${s}"
+                                th:selected="${s == status}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Bottone -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filtra</button>
+                </div>
+            </form>
+
+
+            <div th:if="${param.successId}" class="alert alert-success">
+                Ticket #[[${param.successId}]] aggiornato con successo!
+            </div>        
+
+            <div th:replace="~{fragments/ticket-table :: ticketTable(${myTickets})}"></div>
+        </div>
     </main>
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
