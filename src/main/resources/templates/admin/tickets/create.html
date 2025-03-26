@@ -59,6 +59,19 @@
             <a th:href="@{/admin/dashboard}" class="btn btn-secondary">Annulla</a>
         </div>
     </form>
+    <div class="mt-4">
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" 
+        th:href="@{/admin/dashboard}" 
+        class="btn btn-secondary">
+            Torna alla Dashboard
+        </a>
+        
+        <a th:if="${#authorization.expression('hasRole(''OPERATOR'')')}" 
+        th:href="@{/operator/dashboard}" 
+        class="btn btn-secondary">
+            Torna alla Dashboard
+        </a>
+    </div>
 </div>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
